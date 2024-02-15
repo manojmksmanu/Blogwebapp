@@ -1,0 +1,18 @@
+.btn-log-in,
+.btn-sign-up {
+    background-color: #298af2;
+    transition: 0.2s linear;
+    color: white;
+}
+
+.btn-log-in:hover {
+    color: white;
+    background-color: #298af2;
+    transform: scale(0.9);
+}
+
+.btn-sign-up:hover {
+    color: white;
+    background-color: #298af2;
+    transform: scale(0.9);
+}

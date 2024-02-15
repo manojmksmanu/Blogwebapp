@@ -1,8 +1,146 @@
-import React from 'react'
+// import React from 'react'
+import { useState } from 'react'
+import './style.css'
+import Form from 'react-bootstrap/Form';
+import { useNavigate } from "react-router-dom";
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+}
 
 const Auth = () => {
+  const [state, setState] = useState(initialState);
+  const [signUp, setSignUp] = useState(false);
+  const { email, password, firstName, lastName, confirmPassword } = state;
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
   return (
-    <div>Auth</div>
+    <div className='container-fluid mb-4'>
+      <div className='container'>
+        <div className="col-12 text-center">
+          <div className="text-center heading  py-2">
+            <h2> {!signUp ? "Login-In" : "Sign-Up"}</h2>
+          </div>
+        </div>
+        <div className="row h-100 justify-content-center align-items-center">
+          <div className="col-10 col-md-8 col-lg-6">
+            <form className="row">
+              {!signUp && (<div className="col-12 py-3">
+                <Form.Control
+                  type="text"
+                  placeholder='Name'
+                />
+              </div>)}
+              {signUp && (
+                <>
+                  <div className="col-6 py-3">
+                    <input
+                      type="text"
+                      className="form-control input-text-box"
+                      placeholder="First Name"
+                      name="firstName"
+                      value={firstName}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-6 py-3">
+                    <input
+                      type="text"
+                      className="form-control input-text-box"
+                      placeholder="Last Name"
+                      name="lastName"
+                      value={lastName}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </>
+              )}
+              <div className="col-12 py-3">
+                <input
+                  type="email"
+                  className="form-control input-text-box"
+                  placeholder="Email"
+                  name="email"
+                  value={email}
+                  onChange={handleChange}
+                />
+              </div>
+              {signUp && (
+                <div className="col-12 py-3">
+                  <input
+                    type="password"
+                    className="form-control input-text-box"
+                    placeholder="Confirm Password"
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={handleChange}
+                  />
+                </div>
+              )}
+
+              <div className="col-12 py-3">
+                <Form.Control
+                  type="password"
+                  placeholder='Password'
+                />
+              </div>
+              <div className="col-12 py-3 text-center">
+                <button
+                  className={`btn ${!signUp ? "btn-log-in" : "btn-sign-up"}`}
+                  type="submit"
+                >
+                  {!signUp ? "Login In" : "Sign-up"}
+                </button>
+              </div>
+            </form>
+            <div>
+              {!signUp ? (
+                <>
+                  <div className="text-center justify-content-center mt-2 pt-2">
+                    <p className="small fw-bold mt-2 pt-1 mb-0">
+                      Don't have an account ?&nbsp;
+                      <span
+                        className="link-danger"
+                        style={{ textDecoration: "none", cursor: "pointer" }}
+                        onClick={() => setSignUp(true)}
+                      >
+                        Sign Up
+                      </span>
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-center justify-content-center mt-2 pt-2">
+                    <p className="small fw-bold mt-2 pt-1 mb-0">
+                      Already have an account ?&nbsp;
+                      <span
+                        style={{
+                          textDecoration: "none",
+                          cursor: "pointer",
+                          color: "#298af2",
+                        }}
+                        onClick={() => setSignUp(false)}
+                      >
+                        Login
+                      </span>
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   )
 }
 

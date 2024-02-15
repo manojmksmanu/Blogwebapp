@@ -2,20 +2,24 @@ import './App.css';
 import Home from './pages/Home';
 import About from './pages/About';
 import Details from './pages/Detail';
+import Auth from './pages/Auth';
 import AddEditBlog from './pages/AddEditBlog';
 import NotFound from './pages/NotFound';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
+import Header from './components/Header';
 function App() {
   return (
     <div className="App">
       <ToastContainer />
+      <Header/>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/details/:id" element={<Details />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/create" element={<AddEditBlog />} />
           <Route path="/update/:id" element={<AddEditBlog />} />
           <Route path="*" element={<NotFound />} />
