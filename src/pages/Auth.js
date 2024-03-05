@@ -2,7 +2,11 @@
 import { useState } from 'react'
 import './style.css'
 import Form from 'react-bootstrap/Form';
+import { toast } from "react-toastify";
+import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 const initialState = {
   firstName: "",
   lastName: "",
@@ -11,7 +15,7 @@ const initialState = {
   confirmPassword: "",
 }
 
-const Auth = () => {
+const Auth = ({ setActive  }) => {
   const [state, setState] = useState(initialState);
   const [signUp, setSignUp] = useState(false);
   const { email, password, firstName, lastName, confirmPassword } = state;
@@ -21,17 +25,46 @@ const Auth = () => {
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    if (!signUp) {
+      if (email && password) {
+        const { user } = await signInWithEmailAndPassword(auth, email, password)
+        setActive("home");
+      }
+      else {
+        return toast.error("All fields are mandatory to fill");
+      }
+      // await updateProfile(user, { displayName: `${firstName} ${lastName}` })
+    }
+    else {
+      console.log(password, 'password')
+      console.log('confirm', confirmPassword)
+      if (password !== confirmPassword) {
+        return toast.error("password don't match")
+      }
+      if (firstName && lastName && email && password) {
+        const { user } = await createUserWithEmailAndPassword(auth, email, password)
+        await updateProfile(user, { displayName: `${firstName} ${lastName}` })
+        setActive("home");
+      }
+      else {
+        return toast.error("All fields are mandatory to fill");
+      }
+    }
+    navigate("/")
+  }
   return (
     <div className='container-fluid mb-4'>
       <div className='container'>
         <div className="col-12 text-center">
           <div className="text-center heading  py-2">
-            <h2> {!signUp ? "Login-In" : "Sign-Up"}</h2>
+            <h2> {signUp ? "Sign-Up" : "Login-In"}</h2>
           </div>
         </div>
         <div className="row h-100 justify-content-center align-items-center">
           <div className="col-10 col-md-8 col-lg-6">
-            <form className="row">
+            <form className="row" onSubmit={handleAuth}>
               {!signUp && (<div className="col-12 py-3">
                 <Form.Control
                   type="text"
@@ -62,6 +95,7 @@ const Auth = () => {
                   </div>
                 </>
               )}
+
               <div className="col-12 py-3">
                 <input
                   type="email"
@@ -72,6 +106,17 @@ const Auth = () => {
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="col-12 py-3">
+                <Form.Control
+                  type="password"
+                  placeholder='Password'
+                  name='password'
+                  value={password}
+                  onChange={handleChange}
+                />
+              </div>
+
               {signUp && (
                 <div className="col-12 py-3">
                   <input
@@ -85,12 +130,7 @@ const Auth = () => {
                 </div>
               )}
 
-              <div className="col-12 py-3">
-                <Form.Control
-                  type="password"
-                  placeholder='Password'
-                />
-              </div>
+
               <div className="col-12 py-3 text-center">
                 <button
                   className={`btn ${!signUp ? "btn-log-in" : "btn-sign-up"}`}

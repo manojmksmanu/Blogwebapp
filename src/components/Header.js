@@ -6,7 +6,11 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-const Header = () => {
+const Header = ({ active, setActive, user, handleLogout }) => {
+  const userId = user?.uid;
+  const userName = user?.displayName;
+  console.log("userId", userId);
+  console.log("name", user?.displayName);
   return (
     //    <nav classNameNameNameName='navbar navbar-expand-lg navbar-light bg-light'>
     // <div classNameNameNameName='container-fluid bg-faded padding-media'>
@@ -39,14 +43,25 @@ const Header = () => {
             <Nav.Link href='/'>Home</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
             <Nav.Link href="/details">Details</Nav.Link>
-            
+
 
 
           </Nav>
-
-          <Button variant="outline-success">
-          <Nav.Link href="/auth">SignUp</Nav.Link>
+          <div>
+            {
+              userId ? <>{user?.displayName}</> : (<span></span>)
+            }
+          </div>
+          {
+            userId ? <><Button variant="outline-success m-2"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button> </> : <Button variant="outline-success">
+              <Nav.Link href="/auth">SignUp</Nav.Link>
             </Button>
+          }
+
 
         </Navbar.Collapse>
       </Container>

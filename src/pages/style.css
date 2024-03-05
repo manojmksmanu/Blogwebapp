@@ -1,4 +1,9 @@
-.btn-log-in,
+.btn-log-in {
+    background-color: #298af2;
+    transition: 0.2s linear;
+    color: white;
+}
+
 .btn-sign-up {
     background-color: #298af2;
     transition: 0.2s linear;
